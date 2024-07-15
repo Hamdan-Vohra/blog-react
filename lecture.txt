@@ -1,0 +1,21 @@
+In order to use routing in react we have to install a package called as react-router-dom
+After installing package three important things to be imported from that package
+BrowserRouter : that can be only one in one react-app no nested routers are allowed
+Routes : this is the replacement for nested routing using switch 
+Route : this is the component accept props include path and element that is component
+
+--For doing nested routing ,the sample is below
+What if we have to do nested routing from about page,then
+
+//in main app
+<Routes>
+    <Route path='/' element={<Home/>}
+    <Route path='/about*' element={<Home/>}
+</Routes>
+
+//in about component
+<Routes>
+    <Route path='team' element={<Team/>}
+    <Route path='developers' element={<Developers/>}
+</Routes>
+

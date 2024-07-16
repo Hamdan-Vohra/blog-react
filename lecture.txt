@@ -19,3 +19,68 @@ What if we have to do nested routing from about page,then
     <Route path='developers' element={<Developers/>}
 </Routes>
 
+--importing Link from react-router-dom is just same lika as a with href but 
+this tells react router don't use this link from the server and just route to the proper component
+
+--here in place of 'href' we have 'to' attribute
+
+//Navigation
+(1)Using Hook:
+--to redirect from page to another page we can either use Navigate component or useNavigate hook
+            const navigate = useNavigate();//it provide function to call
+            navigate('/') //redirect it to home
+
+(2)Using component:
+            <Navigate to='/'/> simple
+
+Important>>
+(3)Another efficient and reusable method of redirecting
+Higher Order Component: using useNavigate Hook
+we named HOC as Redirect.
+                CODE:
+                // Redirect.js
+                import { useNavigate } from 'react-router-dom';
+
+                const Redirect = (WrappedComponent, to) => {
+                return (props) => {
+                    const navigate = useNavigate();
+
+                    const redirect = () => {
+                    navigate(to);
+                    };
+
+                    return <WrappedComponent {...props} redirect={redirect} />;
+                };
+                };
+
+                export default Redirect;
+
+                // Post.js
+                import React from 'react';
+                import { useParams } from 'react-router-dom';
+                import Redirect from './Redirect';
+
+                function Post({ redirect }) {
+                const { postId } = useParams();
+
+                const deletePost = () => {
+                    // Simulating a delete operation
+                    console.log(`Post with ID ${postId} deleted`);
+                    // Redirect to the home page after deletion
+                    redirect();
+                };
+
+                return (
+                    <div>
+                    <h1>Post Details for ID: {postId}</h1>
+                    <button onClick={deletePost}>Delete Post</button>
+                    </div>
+                );
+                }
+
+                export default Redirect(Post, '/');//exporting two components indirectly
+
+
+Important>>
+Cons of useLocation for redirecting: using useLocation hook for redirection is not preferable 
+as it is only used for acessing location.pathname ,modifying it to redirect is against the react-router rules

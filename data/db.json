@@ -1,0 +1,10 @@
+{
+  "posts": [
+    {
+      "id": 1,
+      "title": "My first post",
+      "datetime": "July 17 ,2024 3:16:44 PM",
+      "body": "This is the body for first post\n"
+    }
+  ]
+}

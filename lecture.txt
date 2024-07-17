@@ -84,3 +84,11 @@ we named HOC as Redirect.
 Important>>
 Cons of useLocation for redirecting: using useLocation hook for redirection is not preferable 
 as it is only used for acessing location.pathname ,modifying it to redirect is against the react-router rules
+
+
+AXIOS Api Request:
+In this project we will use axios to fetch apis
+
+--we have to set baseUrl includes port number too.
+--axios.get() method return json object doesn't need to convert it to json object
+--Also it catch errors if response is not in range of status ok

@@ -9,7 +9,7 @@ const Post = ({ post }) => {
                 <p className='psotDate'>{post.datetime}</p>
             </Link>
             <p className='postBody'>
-                {(post.body).length <= 25 ?
+                {(post.body).length <= 26 ?
                     post.body
                     : `${(post.body).slice(0, 25)}...`}
             </p>

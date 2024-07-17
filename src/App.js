@@ -1,8 +1,8 @@
 
 //importing all components
 import { Header, Nav, Footer, Home, About, PostPage, NewPost, EditPost, Missing } from './Exporter'
-import { Route, Routes, useNavigate } from 'react-router-dom'
-import { useState, useEffect } from 'react'
+import { useWindowSize, useAxiosFetch, useState, useEffect, useNavigate } from './HooksExporter'
+import { Route, Routes } from 'react-router-dom'
 import { format } from 'date-fns'
 import api from './api/posts'
 
@@ -16,27 +16,11 @@ function App() {
   const [editBody, setEditBody] = useState('')
   const [searchResults, setSearchResults] = useState([]);
   const navigate = useNavigate();
+  //custom hook
+  const { width } = useWindowSize();
+  const { data, fetchErr, isLoading } = useAxiosFetch('http://localhost:3500/posts')
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        //using axios api http fns 
-        const response = await api.get('/posts');
-        setPosts(response.data)
-      } catch (err) {
-        //if error is related to response
-        if (err.response) {
-          console.log(err.response.data);
-          console.log(err.response.status);
-          console.log(err.response.header);
-        } else {
-          console.log(`Error:${err.message}`)
-        }
-      }
-    }
-
-    fetchPosts();
-  }, [])
+  useEffect(() => { setPosts(data) }, [data]);
 
   useEffect(() => {
     const results = posts.filter((post) => (post.title.toLowerCase()).includes(search.toLowerCase()) || (post.body.toLowerCase()).includes(search.toLowerCase()));
@@ -85,7 +69,6 @@ function App() {
 
   const handleDelete = async (id) => {
     try {
-      console.log('Delete')
       await api.delete(`/posts/${id}`);
       const updatedPosts = posts.filter((post) => post.id !== id)
       setPosts(updatedPosts)
@@ -97,12 +80,12 @@ function App() {
 
   return (
     <div className="App">
-      <Header title={'ReactJs Blog'} />
+      <Header title={'ReactJs Blog'} width={width} />
       <Nav
         search={search}
         setSearch={setSearch} />
       <Routes>
-        <Route path='/' element={<Home posts={searchResults} />} />
+        <Route path='/' element={<Home posts={searchResults} fetchErr={fetchErr} isLoading={isLoading} />} />
         <Route path="/post" element={<NewPost handleSubmit={handleSubmit} postTitle={postTitle} setPostTitle={setPostTitle} postBody={postBody} setPostBody={setPostBody} />} />
         <Route path='/post/:id' element={<PostPage posts={posts} handleDelete={handleDelete} />} />
         <Route path='/edit/:id' element={<EditPost posts={posts} handleEdit={handleEdit} editTitle={editTitle} setEditTitle={setEditTitle} editBody={editBody} setEditBody={setEditBody} />} />

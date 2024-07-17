@@ -92,3 +92,9 @@ In this project we will use axios to fetch apis
 --we have to set baseUrl includes port number too.
 --axios.get() method return json object doesn't need to convert it to json object
 --Also it catch errors if response is not in range of status ok
+--we use patch if we want to update any of the field of one post,but we generally use put to change a whole post
+
+
+Custom Hooks:
+
+--useEffect has cleanup function which clean the memory whenever the dependecy changes in order to avoid memory leak

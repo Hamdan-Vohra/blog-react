@@ -8,9 +8,10 @@ const EditPost = ({
     const post = posts.find(post => post.id.toString() === id);
 
     useEffect(() => {
+        console.log('in use effect')
         setEditTitle(post.title)
         setEditBody(post.body)
-    }, [post, setEditTitle, setEditBody])
+    }, [post, setEditBody, setEditTitle])
     return (
         <main className='NewPost'>
             {

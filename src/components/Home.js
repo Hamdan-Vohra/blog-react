@@ -1,14 +1,17 @@
 import React from 'react'
 import FeedData from './FeedData'
+import { useContext } from '../HooksExporter'
+import DataContext from '../context/DataContext'
 
-const Home = ({ posts, fetchErr, isLoading }) => {
+const Home = () => {
+    const { searchResults, fetchErr, isLoading } = useContext(DataContext)
     return (
         <main className='Home'>
-            {!isLoading && fetchErr && <p className='statusMsg' style={{ color: 'red' }}>{fetchErr}</p>}
-            {isLoading && <p className='statusMsg'>Loading Posts..</p>}
+            {fetchErr && <p className='statusMsg' style={{ color: 'red' }}>{fetchErr}</p>}
+            {isLoading && !fetchErr && <p className='statusMsg'>Loading Posts..</p>}
             {
-                !isLoading && !fetchErr && ((posts.length) ? (
-                    <FeedData posts={posts} />
+                !fetchErr && !isLoading && ((searchResults.length) ? (
+                    <FeedData posts={searchResults} />
                 ) : (
                     <p className='statusMsg'>No Posts to display.</p>
                 ))

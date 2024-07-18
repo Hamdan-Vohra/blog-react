@@ -1,9 +1,13 @@
-import React, { Fragment, useEffect } from 'react'
+import { Fragment, useEffect } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { useContext, useState } from '../HooksExporter'
+import DataContext from '../context/DataContext'
 
-const EditPost = ({
-    posts, handleEdit, editTitle, setEditTitle, editBody, setEditBody
-}) => {
+const EditPost = () => {
+    const { posts, setPosts, format, api, navigate } = useContext(DataContext)
+    const [editTitle, setEditTitle] = useState('')
+    const [editBody, setEditBody] = useState('')
+
     const { id } = useParams();
     const post = posts.find(post => post.id.toString() === id);
 
@@ -11,7 +15,22 @@ const EditPost = ({
         console.log('in use effect')
         setEditTitle(post.title)
         setEditBody(post.body)
-    }, [post, setEditBody, setEditTitle])
+    }, [post, setEditBody, setEditTitle]);
+
+    const handleEdit = async (id) => {
+        const datetime = format(new Date(), 'MMMM dd, yyyy pp')
+        const editPost = { id, title: editTitle, datetime, body: editBody }
+        try {
+            const response = await api.put(`/posts/${id}`, editPost);
+            const editedPosts = posts.map(post => post.id === id ? response.data : post);
+            setPosts(editedPosts)
+            setEditTitle('')
+            setEditBody('')
+            navigate('/')
+        } catch (err) {
+            console.log(`Error:${err.message}`)
+        }
+    }
     return (
         <main className='NewPost'>
             {

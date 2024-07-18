@@ -1,6 +1,34 @@
-import React from 'react'
+import { useContext, useState } from '../HooksExporter'
+import DataContext from '../context/DataContext'
 
-const NewPost = ({ postTitle, setPostTitle, postBody, setPostBody, handleSubmit }) => {
+const NewPost = () => {
+    const { posts, setPosts, format, api, navigate } = useContext(DataContext)
+    const [postTitle, setPostTitle] = useState('')
+    const [postBody, setPostBody] = useState('')
+    const handleSubmit = async (event) => {
+        event.preventDefault();
+        const id = posts.length ? posts[posts.length - 1].id + 1 : 1;
+        const datetime = format(new Date(), "MMMM dd ,yyyy pp");
+        const newPost = {
+            id,
+            title: postTitle,
+            datetime,
+            body: postBody
+        }
+
+        //handling api request
+        try {
+
+            const response = await api.post('/posts', newPost);
+            const updatedPosts = [...posts, response.data]
+            setPosts(updatedPosts);
+            setPostBody('');
+            setPostTitle('');
+            navigate('/');
+        } catch (err) {
+            console.log(`Error: ${err.message}`)
+        }
+    }
     return (
         <main className='NewPost'>
             <h2>New Post</h2>

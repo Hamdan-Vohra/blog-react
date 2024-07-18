@@ -4,7 +4,7 @@ import axios from 'axios'
 const useAxiosFetch = (dataUrl) => {
     const [data, setData] = useState([]);
     const [isLoading, setIsLoading] = useState(false);
-    const [fetchError, setFetchError] = useState(null);
+    const [fetchErr, setFetchErr] = useState(null);
 
     useEffect(() => {
         let isMounted = true;
@@ -18,11 +18,12 @@ const useAxiosFetch = (dataUrl) => {
                 })
                 if (isMounted) {
                     setData(response.data)
-                    setFetchError(null)
+                    setFetchErr(null)
                 }
             } catch (err) {
                 if (isMounted) {
-                    setFetchError(err.message)
+                    console.log(`Error:${err.message}`)
+                    setFetchErr(err.message)
                     setData([])
                 }
             } finally {
@@ -38,7 +39,7 @@ const useAxiosFetch = (dataUrl) => {
             source.cancel();
         }
     }, [dataUrl])
-    return { data, fetchError, isLoading }
+    return { data, fetchErr, isLoading }
 }
 
 export default useAxiosFetch;

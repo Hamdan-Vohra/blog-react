@@ -98,3 +98,39 @@ In this project we will use axios to fetch apis
 Custom Hooks:
 
 --useEffect has cleanup function which clean the memory whenever the dependecy changes in order to avoid memory leak
+
+Context API and useCOntext hook:
+ --It is really helpful in drilling props to their child components easily and in an organized way
+ --To cleanup the app.js file we will make a folder and make a file there to handle props drilling to the app.js' children
+ In regards,we will use createContext and useContext .
+ In Context file we will export DataProvider and DataContext that we create 
+ 
+ --))Simple snippet:
+
+        import {createContext} from 'react'
+
+        const DataContext = createContext();
+
+        export const DataProvider = ({children}) {
+            return(
+                <DataContext.Provider value={
+                    //here will come what we want to use in children components like handlers,states,and custom hooks
+                }>   {children}    </DataContext.Provider>
+            )
+        }
+
+        export default DataContext
+
+ //Using useContext Hook in children to get acess to the props
+        import DataContext from './context/DataContext'
+        import {useContext} from 'react'
+
+        const  {posts,setPosts,handleSubmit} = useContext(DataContext);
+
+ Important !
+ we have to import DataProvider from where we have to drill props to their children here in this case app.js
+ -))Snippet:
+        import {DataProvider} from './context/DataContext'
+        <DataProvider>
+        //here we route to the children' components
+        </DataProvider>
